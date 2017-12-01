@@ -27,7 +27,8 @@ with open('purchase_buckets.csv') as buckets_file:
         upcased_key = original_key.upper()
         buckets[upcased_key] = [original_key]
 
-print buckets
+print buckets.keys()
+print "--------------"
 
 # iterate through purchases, build key and find match in buckets
 with open('purchase_data.csv') as purchases_file:
@@ -52,20 +53,21 @@ with open('purchase_data.csv') as purchases_file:
         for key in key_list:
             if key in buckets:
                 print "Y %s" % key
-                buckets[key].append(",".join(map(str, row)))
-                # print buckets.get(key)
+                stringified_record = ",".join(map(str, row))
+                print stringified_record
+                buckets[key].append(stringified_record)
+                print buckets[key]
+                break
             else:
                 print "N %s" % key
                 # print buckets.get(key)
-            # break;
-            # if key in buckets.keys()
 
 results = []
 
 for bucket, content in buckets.items():
     current_group = {}
     current_group["bucket"] = content[0]
-    current_group["purchases"] = content[1:-1]
+    current_group["purchases"] = content[1:]
     results.append(current_group)
 
 results_file = open('results.json', 'w')
