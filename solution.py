@@ -49,15 +49,13 @@ with open('purchase_data.csv') as purchases_file:
         key_list = [most_specific_key, duration_specific_key, price_specific_key,
                     publisher_specific_key, most_generic_key]
 
-        for index, key in enumerate(key_list):
-            # print key, index
+        for key in key_list:
             if key in buckets:
-                print "Y %d %s" % (index, key)
-
+                print "Y %s" % key
                 buckets[key].append(",".join(map(str, row)))
                 # print buckets.get(key)
             else:
-                print "N %d %s" % (index, key)
+                print "N %s" % key
                 # print buckets.get(key)
             # break;
             # if key in buckets.keys()
