@@ -12,32 +12,27 @@
     # name, *, *
     # *, *, *
 
-# fout = open('etl.txt', 'w')
-# line1 = "This here's the wattle, \n"
-# fout.write(line1)
-# fout.close()
-
 import csv
 
-purchases_file = open('purchase_data.csv')
-for line in purchases_file:
-    records = line.split(",")
-    most_specific_key =  "".join([records[2],records[4],records[5]]).upper()
-    duration_specific_key = "".join([records[2],"*",records[5]]).upper()
-    price_specific_key = "".join([records[2],records[4],"*"]).upper()
-    publisher_specific_key = "".join([records[2],"*","*"]).upper()
+# purchases_file = open('purchase_data.csv')
+# for line in purchases_file:
+#     records = line.split(",")
+#     most_specific_key =  "".join([records[2],records[4],records[5]]).upper()
+#     duration_specific_key = "".join([records[2],"*",records[5]]).upper()
+#     price_specific_key = "".join([records[2],records[4],"*"]).upper()
+#     publisher_specific_key = "".join([records[2],"*","*"]).upper()
 
-    print most_specific_key
-    print duration_specific_key
-    print price_specific_key
-    print publisher_specific_key
+#     print most_specific_key
+#     print duration_specific_key
+#     print price_specific_key
+#     print publisher_specific_key
 
     # matches = re.search("^([^,]*),\d{13},([^,]*),[^,]*,(.*,.*)(?=,\d{4})", line)
     # print matches.group(0)
     # print matches.group(1)
     # print matches.group(2)
     # print matches.group(3)
-purchases_file.close
+# purchases_file.close
 
 # try:
 #     buckets_file = open('purchase_buckets.csv')
@@ -51,8 +46,16 @@ purchases_file.close
 #     print 'Something went wrong and could not open the buckets file'
 
 
-with open('purchase_buckets.csv') as buckets_file:
-    readCSV = csv.reader(buckets_file)
-    for row in readCSV:
-        key = ",".join([row[0],row[1],row[2]]).upper()
-        print key
+with open('results.csv', 'w') as results_file:
+    writer = csv.writer(results_file)
+
+    with open('purchase_buckets.csv') as buckets_file:
+        readCSV = csv.reader(buckets_file)
+        for row in readCSV:
+            key = ",".join([row[0],row[1],row[2]]).upper()
+            writer.writerow([row[0],row[1],row[2]])
+
+
+
+
+
