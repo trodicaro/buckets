@@ -66,8 +66,8 @@ results = []
 
 for bucket, content in buckets.items():
     current_group = {}
-    current_group["bucket"] = bucket
-    current_group["purchases"] = content
+    current_group["bucket"] = content[0]
+    current_group["purchases"] = content[1:-1]
     results.append(current_group)
 
 results_file = open('results.json', 'w')
