@@ -48,9 +48,13 @@ with open('purchase_buckets.csv') as buckets_file:
 
 json_format = json.dumps(results)
 
-with open('results.csv', 'w') as results_file:
-    writer = csv.writer(results_file)
-    json.dump(json_format, results_file)
+# with open('results.csv', 'w') as results_file:
+#     writer = csv.writer(results_file)
+#     json.dump(json_format, results_file)
+
+results_file = open('results.json', 'w')
+results_file.write(json.dumps(results, indent = 4, sort_keys = True))
+results_file.close()
 
     # for item in json_format:
     #   print(type(item))
