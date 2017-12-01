@@ -14,6 +14,7 @@
 
 import csv
 import json
+from collections import OrderedDict
 
 # purchases_file = open('purchase_data.csv')
 # for line in purchases_file:
@@ -35,16 +36,37 @@ import json
     # print matches.group(3)
 # purchases_file.close
 
+buckets = OrderedDict()
 results = []
 
 with open('purchase_buckets.csv') as buckets_file:
     readCSV = csv.reader(buckets_file)
     for row in readCSV:
-        key = ",".join([row[0],row[1],row[2]])
-        current_group = {}
-        current_group["bucket"] = key
-        current_group["purchases"] = []
-        results.append(current_group)
+        bucket = ",".join([row[0],row[1],row[2]])
+        buckets[bucket] = []
+
+
+for bucket, content in buckets.items():
+    print bucket
+    current_group = {}
+    current_group["bucket"] = bucket
+    current_group["purchases"] = content
+    results.append(current_group)
+
+print results
+
+with open('purchase_data.csv') as purchases_file:
+    readCSV = csv.reader(purchases_file)
+    for row in readCSV:
+        order_id = row[0]
+        publisher = row[2]
+        price = row[4]
+        duration = row[5]
+        key = ",".join([order_id, publisher, price, duration])
+        # if  results[key.lower()]:
+        #     print "Exists"
+        #     print key.lower()
+
 
 json_format = json.dumps(results)
 
