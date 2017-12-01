@@ -13,6 +13,7 @@
     # *, *, *
 
 import csv
+import json
 
 # purchases_file = open('purchase_data.csv')
 # for line in purchases_file:
@@ -34,19 +35,27 @@ import csv
     # print matches.group(3)
 # purchases_file.close
 
-buckets = {}
+results = []
 
 with open('purchase_buckets.csv') as buckets_file:
     readCSV = csv.reader(buckets_file)
     for row in readCSV:
         key = ",".join([row[0],row[1],row[2]]).upper()
-        buckets[key] = []
+        current_group = {}
+        current_group["bucket"] = key
+        current_group["purchases"] = []
+        results.append(current_group)
+
+json_format = json.dumps(results)
 
 with open('results.csv', 'w') as results_file:
     writer = csv.writer(results_file)
+    json.dump(json_format, results_file)
 
-    for key in buckets:
-      writer.writerow(key)
+    # for item in json_format:
+    #   print(type(item))
+    #   print(item)
+    #   writer.writerow(item)
 
 # with open('purchase_data.csv') as purchases_file:
 #     readCSV = csv.reader(purchases_file)
