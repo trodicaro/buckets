@@ -23,8 +23,11 @@ buckets = OrderedDict()
 with open('purchase_buckets.csv') as buckets_file:
     readCSV = csv.reader(buckets_file)
     for row in readCSV:
-        bucket = ",".join([row[0],row[1],row[2]]).lower()
-        buckets[bucket] = []
+        original_key = ",".join([row[0],row[1],row[2]])
+        upcased_key = original_key.upper()
+        buckets[upcased_key] = [original_key]
+
+print buckets
 
 # iterate through purchases, build key and find match in buckets
 with open('purchase_data.csv') as purchases_file:
@@ -46,18 +49,16 @@ with open('purchase_data.csv') as purchases_file:
         key_list = [most_specific_key, duration_specific_key, price_specific_key,
                     publisher_specific_key, most_generic_key]
 
-        for index, key in enumerate(key_list):
-            # print key
-            # print buckets
-            if key in buckets:
-                print "Y %d %s" % (index, key)
-                # print buckets.get(key)
-            else:
-                print "N %d %s" % (index, key)
-                # print buckets.get(key)
-            # break;
-            # if key in buckets.keys()
-              # buckets[key].append(row)
+        # for index, key in enumerate(key_list):
+        #     if key in buckets:
+        #         print "Y %d %s" % (index, key)
+        #         # print buckets.get(key)
+        #     else:
+        #         print "N %d %s" % (index, key)
+        #         # print buckets.get(key)
+        #     # break;
+        #     # if key in buckets.keys()
+        #       # buckets[key].append(row)
 
 results = []
 
