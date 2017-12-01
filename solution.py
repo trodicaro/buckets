@@ -43,9 +43,9 @@ try:
     buckets_file = open('purchase_buckets.csv')
     buckets = {}
     for line in buckets_file:
-        key = "".join(line.strip())
+        key = "".join(line.rstrip().strip(','))
         buckets[key] = []
     buckets_file.close()
     print buckets
-except:
+except IOError:
     print 'Something went wrong and could not open the buckets file'
