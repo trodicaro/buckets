@@ -19,16 +19,13 @@ from collections import OrderedDict
 
 buckets = OrderedDict()
 
-# create a buckets dictionary
+# create a buckets dictionary; keep original key as first item in values
 with open('purchase_buckets.csv') as buckets_file:
     readCSV = csv.reader(buckets_file)
     for row in readCSV:
         original_key = ",".join([row[0],row[1],row[2]])
         upcased_key = original_key.upper()
         buckets[upcased_key] = [original_key]
-
-print buckets.keys()
-print "--------------"
 
 # iterate through purchases, build key and find match in buckets
 with open('purchase_data.csv') as purchases_file:
@@ -52,15 +49,9 @@ with open('purchase_data.csv') as purchases_file:
 
         for key in key_list:
             if key in buckets:
-                print "Y %s" % key
                 stringified_record = ",".join(map(str, row))
-                print stringified_record
                 buckets[key].append(stringified_record)
-                print buckets[key]
                 break
-            else:
-                print "N %s" % key
-                # print buckets.get(key)
 
 results = []
 
