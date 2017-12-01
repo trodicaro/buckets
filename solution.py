@@ -40,7 +40,7 @@ results = []
 with open('purchase_buckets.csv') as buckets_file:
     readCSV = csv.reader(buckets_file)
     for row in readCSV:
-        key = ",".join([row[0],row[1],row[2]]).upper()
+        key = ",".join([row[0],row[1],row[2]])
         current_group = {}
         current_group["bucket"] = key
         current_group["purchases"] = []
@@ -48,19 +48,8 @@ with open('purchase_buckets.csv') as buckets_file:
 
 json_format = json.dumps(results)
 
-# with open('results.csv', 'w') as results_file:
-#     writer = csv.writer(results_file)
-#     json.dump(json_format, results_file)
-
 results_file = open('results.json', 'w')
 results_file.write(json.dumps(results, indent = 4, sort_keys = True))
 results_file.close()
 
-    # for item in json_format:
-    #   print(type(item))
-    #   print(item)
-    #   writer.writerow(item)
-
-# with open('purchase_data.csv') as purchases_file:
-#     readCSV = csv.reader(purchases_file)
 
