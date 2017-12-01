@@ -17,7 +17,7 @@
 # fout.write(line1)
 # fout.close()
 
-
+import csv
 
 purchases_file = open('purchase_data.csv')
 for line in purchases_file:
@@ -39,13 +39,20 @@ for line in purchases_file:
     # print matches.group(3)
 purchases_file.close
 
-try:
-    buckets_file = open('purchase_buckets.csv')
-    buckets = {}
-    for line in buckets_file:
-        key = "".join(line.rstrip().strip(','))
-        buckets[key] = []
-    buckets_file.close()
-    print buckets
-except IOError:
-    print 'Something went wrong and could not open the buckets file'
+# try:
+#     buckets_file = open('purchase_buckets.csv')
+#     buckets = {}
+#     for line in buckets_file:
+#         key = "".join(line.rstrip().strip(','))
+#         buckets[key] = []
+#     buckets_file.close()
+#     print buckets
+# except IOError:
+#     print 'Something went wrong and could not open the buckets file'
+
+
+with open('purchase_buckets.csv') as buckets_file:
+    readCSV = csv.reader(buckets_file)
+    for row in readCSV:
+        key = ",".join([row[0],row[1],row[2]]).upper()
+        print key
