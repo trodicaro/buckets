@@ -1,6 +1,7 @@
 # read buckets files
-  # make a hash with keys a combo of capitalized name, price, capitalized duration
+  # make keys as concat of capitalized name, price, capitalized duration
   # eg: MCGRAW-HILL540_DAY, MCGRAW-HILL3*, MCGRAW-HILL**,*220DAY
+  # later note: I decided to keep the comma in the key since that was the desired output bucket name
 # for each purchase data line
   # extract the relevant chars from the string with a regex:
     # eg:7639,9781541920172,Pearson,ORD,2,1_day,2015-06-30 12:25:00
@@ -37,38 +38,54 @@ from collections import OrderedDict
 # purchases_file.close
 
 buckets = OrderedDict()
-results = []
 
+# create a buckets dictionary
 with open('purchase_buckets.csv') as buckets_file:
     readCSV = csv.reader(buckets_file)
     for row in readCSV:
-        bucket = ",".join([row[0],row[1],row[2]])
+        bucket = ",".join([row[0],row[1],row[2]]).lower()
         buckets[bucket] = []
 
-
-for bucket, content in buckets.items():
-    print bucket
-    current_group = {}
-    current_group["bucket"] = bucket
-    current_group["purchases"] = content
-    results.append(current_group)
-
-print results
-
+# iterate through purchases, build key and find match in buckets
 with open('purchase_data.csv') as purchases_file:
     readCSV = csv.reader(purchases_file)
+
     for row in readCSV:
         order_id = row[0]
         publisher = row[2]
         price = row[4]
         duration = row[5]
-        key = ",".join([order_id, publisher, price, duration])
-        # if  results[key.lower()]:
-        #     print "Exists"
-        #     print key.lower()
+        key = ",".join([publisher, price, duration])
 
+        most_specific_key =  ",".join([publisher, price, duration]).lower()
+        duration_specific_key = ",".join([publisher, "*", duration]).lower()
+        price_specific_key = ",".join([publisher, price, "*"]).lower()
+        publisher_specific_key = ",".join([publisher, "*", "*"]).lower()
+        most_generic_key = ",".join(["*","*","*"]).lower()
 
-json_format = json.dumps(results)
+        key_list = [most_specific_key, duration_specific_key, price_specific_key,
+                    publisher_specific_key, most_generic_key]
+
+        for index, key in enumerate(key_list):
+            # print key
+            # print buckets
+            if key in buckets:
+                print "Y %d %s" % (index, key)
+                # print buckets.get(key)
+            else:
+                print "N %d %s" % (index, key)
+                # print buckets.get(key)
+            # break;
+            # if key in buckets.keys()
+              # buckets[key].append(row)
+
+results = []
+
+for bucket, content in buckets.items():
+    current_group = {}
+    current_group["bucket"] = bucket
+    current_group["purchases"] = content
+    results.append(current_group)
 
 results_file = open('results.json', 'w')
 results_file.write(json.dumps(results, indent = 4, sort_keys = True))
