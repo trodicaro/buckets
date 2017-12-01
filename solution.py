@@ -34,28 +34,20 @@ import csv
     # print matches.group(3)
 # purchases_file.close
 
-# try:
-#     buckets_file = open('purchase_buckets.csv')
-#     buckets = {}
-#     for line in buckets_file:
-#         key = "".join(line.rstrip().strip(','))
-#         buckets[key] = []
-#     buckets_file.close()
-#     print buckets
-# except IOError:
-#     print 'Something went wrong and could not open the buckets file'
+buckets = {}
 
+with open('purchase_buckets.csv') as buckets_file:
+    readCSV = csv.reader(buckets_file)
+    for row in readCSV:
+        key = ",".join([row[0],row[1],row[2]]).upper()
+        buckets[key] = []
 
 with open('results.csv', 'w') as results_file:
     writer = csv.writer(results_file)
 
-    with open('purchase_buckets.csv') as buckets_file:
-        readCSV = csv.reader(buckets_file)
-        for row in readCSV:
-            key = ",".join([row[0],row[1],row[2]]).upper()
-            writer.writerow([row[0],row[1],row[2]])
+    for key in buckets:
+      writer.writerow(key)
 
-
-
-
+# with open('purchase_data.csv') as purchases_file:
+#     readCSV = csv.reader(purchases_file)
 
