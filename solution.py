@@ -38,14 +38,17 @@ with open('purchase_data.csv') as purchases_file:
         duration = row[5]
         key = ",".join([publisher, price, duration])
 
-        most_specific_key =  ",".join([publisher, price, duration]).upper()
-        duration_specific_key = ",".join([publisher, "*", duration]).upper()
-        price_specific_key = ",".join([publisher, price, "*"]).upper()
-        publisher_specific_key = ",".join([publisher, "*", "*"]).upper()
-        most_generic_key = ",".join(["*","*","*"]).upper()
+        complete_key = ",".join([publisher, price, duration]).upper()
+        publisher_duration_key = ",".join([publisher, "*", duration]).upper()
+        publisher_price_key = ",".join([publisher, price, "*"]).upper()
+        publisher_only = ",".join([publisher, "*", "*"]).upper()
+        price_duration_key = ",".join(["*", price, duration]).upper()
+        duration_only_key = ",".join(["*", "*", duration]).upper()
+        price_only_key = ",".join(["*", price, "*"]).upper()
+        catch_all_key = ",".join(["*","*","*"]).upper()
 
-        key_list = [most_specific_key, duration_specific_key, price_specific_key,
-                    publisher_specific_key, most_generic_key]
+        key_list = [complete_key, publisher_duration_key, publisher_price_key, publisher_only,
+                    price_duration_key, duration_only_key, price_only_key, catch_all_key]
 
         for key in key_list:
             if key in buckets:
