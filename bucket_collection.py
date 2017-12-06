@@ -72,9 +72,3 @@ class BucketCollection:
       results_file = open(result_file_name, 'w')
       results_file.write(json.dumps(self.to_json(), indent = 4, sort_keys = True))
       results_file.close()
-
-def run(buckets_file_name, purchases_file_name, result_file_name):
-    bucket_collection = BucketCollection(buckets_file_name)
-    bucket_collection.populate_buckets(purchases_file_name)
-    bucket_collection.to_file(result_file_name)
-
