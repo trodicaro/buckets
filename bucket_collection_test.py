@@ -20,13 +20,17 @@ class BucketTest(unittest.TestCase):
 
     def test_results_file_creation(self):
         "Tests that a result file is generated"
-        self.assertTrue(os.path.isfile(RESULTS_FILENAME))
+        self.assertTrue(os.path.isfile(results_filepath))
 
-    # def test_keys(self):
-    #     "Test that generic bucket was created"
-    #     self.assertIn("*,*,*", results_file)
+    def test_keys(self):
+        "Test that generic bucket was created"
+        self.assertIn("*,*,*", results)
 
 if __name__ == "__main__":
-    run("min_buckets.csv", "min_purchases.csv")
-    RESULTS_FILENAME = os.path.join(os.path.dirname(__file__), "min_results.json")
+    results_filename = "min_results.json"
+    run("min_buckets.csv", "min_purchases.csv", results_filename)
+    results_filepath = os.path.join(os.path.dirname(__file__), results_filename)
+    results_file =  open(results_filepath, 'r')
+    results = results_file.read()
     unittest.main()
+    results_file.close()
