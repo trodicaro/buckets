@@ -1,22 +1,6 @@
-# read buckets files
-  # make keys as concat of capitalized name, price, capitalized duration
-  # eg: MCGRAW-HILL540_DAY, MCGRAW-HILL3*, MCGRAW-HILL**,*220DAY
-  # later note: I decided to keep the comma in the key since that was the desired output bucket name
-# for each purchase data line
-  # extract the relevant chars from the string with a regex:
-    # eg:7639,9781541920172,Pearson,ORD,2,1_day,2015-06-30 12:25:00
-    # capture text between second and third comma, ignore before 4th comma,
-  # check the hash  for key like so:
-    # name, price, duration
-    # name, *, duration
-    # name, price, *
-    # name, *, *
-    # *, *, *
-
 import csv
 import json
 import inspect
-
 
 class Bucket:
     # https://pythonconquerstheuniverse.wordpress.com/2012/02/15/mutable-default-arguments/
