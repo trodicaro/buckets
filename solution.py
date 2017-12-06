@@ -17,10 +17,10 @@ import csv
 import json
 from collections import OrderedDict
 
-def sort_buckets():
+def sort_buckets(buckets_file_name, purchases_file_name):
     buckets = OrderedDict()
     # create a buckets dictionary; keep original key as first item in values
-    with open('min_buckets.csv') as buckets_file:
+    with open(buckets_file_name) as buckets_file:
         readCSV = csv.reader(buckets_file)
         for row in readCSV:
             original_key = ",".join([row[0],row[1],row[2]])
@@ -30,9 +30,10 @@ def sort_buckets():
     if "*,*,*" not in buckets:
         buckets["*,*,*"] = ["*,*,*"]
         buckets.move_to_end("*,*,*", last=False)
+        print("added stars")
 
     # iterate through purchases, build key and find match in buckets
-    with open('min_purchases.csv') as purchases_file:
+    with open(purchases_file_name) as purchases_file:
         readCSV = csv.reader(purchases_file)
 
         for row in readCSV:
