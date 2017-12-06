@@ -17,85 +17,95 @@ import csv
 import json
 from collections import OrderedDict
 
-# class Bucket:
-#     def __init__(self, original_key = "", purchases = []):
-#         self.original_key = original_key
-#         self.purchases = purchases
+class Bucket:
+    def __init__(self, original_key = "", purchases = []):
+        self.original_key = original_key
+        self.key = original_key.upper()
+        self.purchases = purchases
 
-# class BucketCollection:
-#     def create_keys(buckets_file_name, purchases_file_name):
+class BucketCollection:
+    def __init__(self, buckets_file_name):
+        buckets = OrderedDict()
 
-#     def populate_buckets():
+        with open(buckets_file_name) as buckets_file:
+            readCSV = csv.reader(buckets_file)
+            for row in readCSV:
+                original_key = ",".join([row[0],row[1],row[2]])
+                upcased_key = original_key.upper()
+                bucket = Bucket(original_key)
+                buckets[upcased_key] = bucket
 
-#     def build_json():
-
-#     def print_to_file():
-
-def create_keys(buckets_file_name, purchases_file_name):
-    buckets = OrderedDict()
-    # create a buckets dictionary; keep original key as first item in values
-    with open(buckets_file_name) as buckets_file:
-        readCSV = csv.reader(buckets_file)
-        for row in readCSV:
-            original_key = ",".join([row[0],row[1],row[2]])
-            upcased_key = original_key.upper()
-            buckets[upcased_key] = [original_key]
-
-    if "*,*,*" not in buckets:
-        buckets["*,*,*"] = ["*,*,*"]
-        buckets.move_to_end("*,*,*", last=False)
-        print("added stars")
-
-def populate_buckets():
-    with open(purchases_file_name) as purchases_file:
-        readCSV = csv.reader(purchases_file)
-
-        for row in readCSV:
-            order_id = row[0]
-            publisher = row[2]
-            price = row[4]
-            duration = row[5]
-            key = ",".join([publisher, price, duration])
-
-            complete_key = ",".join([publisher, price, duration]).upper()
-            publisher_duration_key = ",".join([publisher, "*", duration]).upper()
-            publisher_price_key = ",".join([publisher, price, "*"]).upper()
-            publisher_only = ",".join([publisher, "*", "*"]).upper()
-            price_duration_key = ",".join(["*", price, duration]).upper()
-            duration_only_key = ",".join(["*", "*", duration]).upper()
-            price_only_key = ",".join(["*", price, "*"]).upper()
-            catch_all_key = ",".join(["*","*","*"]).upper()
-
-            key_list = [complete_key, publisher_duration_key, publisher_price_key, publisher_only,
-                        price_duration_key, duration_only_key, price_only_key, catch_all_key]
-
-            for key in key_list:
-                if key in buckets:
-                    stringified_record = ",".join(map(str, row))
-                    buckets[key].append(stringified_record)
-                    break
+        if "*,*,*" not in buckets:
+            buckets["*,*,*"] = ["*,*,*"]
+            buckets.move_to_end("*,*,*", last=False)
 
 
-def generate_result(buckets):
-    results = []
+        self.buckets = buckets
 
-    for bucket, content in buckets.items():
-        current_group = {}
-        current_group["bucket"] = content[0]
-        current_group["purchases"] = content[1:]
-        results.append(current_group)
+    # def populate_buckets(purchases_file_name):
+    #     with open(purchases_file_name) as purchases_file:
+    #         readCSV = csv.reader(purchases_file)
 
-    return results
+    #         for row in readCSV:
+    #             order_id = row[0]
+    #             publisher = row[2]
+    #             price = row[4]
+    #             duration = row[5]
+    #             key = ",".join([publisher, price, duration])
 
-def print_to_json(results):
-    results_file = open('min_results.json', 'w')
-    results_file.write(json.dumps(results, indent = 4, sort_keys = True))
-    results_file.close()
+    #             complete_key = ",".join([publisher, price, duration]).upper()
+    #             publisher_duration_key = ",".join([publisher, "*", duration]).upper()
+    #             publisher_price_key = ",".join([publisher, price, "*"]).upper()
+    #             publisher_only = ",".join([publisher, "*", "*"]).upper()
+    #             price_duration_key = ",".join(["*", price, duration]).upper()
+    #             duration_only_key = ",".join(["*", "*", duration]).upper()
+    #             price_only_key = ",".join(["*", price, "*"]).upper()
+    #             catch_all_key = ",".join(["*","*","*"]).upper()
 
-def run():
-    buckets = create_keys(buckets_file_name, purchases_file_name)
-    populated_buckets = populate_buckets(buckets)
-    results = generate_result(buckets)
-    print_to_json(results)
+    #             key_list = [complete_key, publisher_duration_key, publisher_price_key, publisher_only,
+    #                         price_duration_key, duration_only_key, price_only_key, catch_all_key]
 
+    #             for key in key_list:
+    #                 if key in buckets:
+    #                     stringified_record = ",".join(map(str, row))
+    #                     buckets[key].append(stringified_record)
+    #                     break
+
+
+    def build_json(self):
+        results = []
+
+        # for bucket, content in buckets.items():
+        #     current_group = {}
+        #     current_group["bucket"] = content[0]
+        #     current_group["purchases"] = content[1:]
+        #     results.append(current_group)
+        print('buckets')
+        for key, bucket in self.buckets.items():
+              print(type(key), key)
+              print(type(bucket), bucket)
+              current_group = {}
+              current_group["bucket"] =  key
+              current_group["purchases"] =  bucket
+              results.append(current_group)
+
+        return results
+
+
+    def to_file(self, result_file_name):
+      results_file = open(result_file_name, 'w')
+      results_file.write(json.dumps(self.build_json(), indent = 4, sort_keys = True))
+      results_file.close()
+
+
+# def main(buckets_file_name, purchases_file_name):
+#     buckets = create_keys(buckets_file_name, purchases_file_name)
+#     populated_buckets = populate_buckets(buckets)
+#     results = generate_result(buckets)
+#     print_to_json(results)
+def run(buckets_file_name, purchases_file_name):
+    bucket_collection = BucketCollection(buckets_file_name)
+    # bucket_collection.populate_buckets(purchases_file_name)
+    # bucket_collection.build_json
+    bucket_collection.to_file("min_results.json")
 
