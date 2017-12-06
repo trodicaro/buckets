@@ -80,10 +80,9 @@ class BucketCollection:
         #     current_group["bucket"] = content[0]
         #     current_group["purchases"] = content[1:]
         #     results.append(current_group)
-        print('buckets')
         for key, bucket in self.buckets.items():
               print(type(key), key)
-              print(type(bucket), bucket)
+              print(type(bucket), bucket.__dir__())
               current_group = {}
               current_group["bucket"] =  key
               current_group["purchases"] =  bucket
