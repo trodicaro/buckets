@@ -17,7 +17,21 @@ import csv
 import json
 from collections import OrderedDict
 
-def sort_buckets(buckets_file_name, purchases_file_name):
+# class Bucket:
+#     def __init__(self, original_key = "", purchases = []):
+#         self.original_key = original_key
+#         self.purchases = purchases
+
+# class BucketCollection:
+#     def create_keys(buckets_file_name, purchases_file_name):
+
+#     def populate_buckets():
+
+#     def build_json():
+
+#     def print_to_file():
+
+def create_keys(buckets_file_name, purchases_file_name):
     buckets = OrderedDict()
     # create a buckets dictionary; keep original key as first item in values
     with open(buckets_file_name) as buckets_file:
@@ -32,7 +46,7 @@ def sort_buckets(buckets_file_name, purchases_file_name):
         buckets.move_to_end("*,*,*", last=False)
         print("added stars")
 
-    # iterate through purchases, build key and find match in buckets
+def populate_buckets():
     with open(purchases_file_name) as purchases_file:
         readCSV = csv.reader(purchases_file)
 
@@ -61,6 +75,8 @@ def sort_buckets(buckets_file_name, purchases_file_name):
                     buckets[key].append(stringified_record)
                     break
 
+
+def generate_result(buckets):
     results = []
 
     for bucket, content in buckets.items():
@@ -69,8 +85,17 @@ def sort_buckets(buckets_file_name, purchases_file_name):
         current_group["purchases"] = content[1:]
         results.append(current_group)
 
+    return results
+
+def print_to_json(results):
     results_file = open('min_results.json', 'w')
     results_file.write(json.dumps(results, indent = 4, sort_keys = True))
     results_file.close()
+
+def run():
+    buckets = create_keys(buckets_file_name, purchases_file_name)
+    populated_buckets = populate_buckets(buckets)
+    results = generate_result(buckets)
+    print_to_json(results)
 
 
