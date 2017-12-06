@@ -15,31 +15,34 @@
 
 import csv
 import json
-from collections import OrderedDict
 import inspect
 
 
 class Bucket:
-    def __init__(self, original_key = "", purchases = []):
+    # https://pythonconquerstheuniverse.wordpress.com/2012/02/15/mutable-default-arguments/
+    def __init__(self, original_key = ""):
         self.original_key = original_key
         self.key = original_key.upper()
-        self.purchases = purchases
+        self.purchases = []
 
 class BucketCollection:
     def __init__(self, buckets_file_name):
-        self.buckets = OrderedDict()
+        self.buckets = {}
+        self.all_keys = []
 
         with open(buckets_file_name) as buckets_file:
             readCSV = csv.reader(buckets_file)
             for row in readCSV:
-                original_key = ",".join([row[0],row[1],row[2]])
-                bucket = Bucket(original_key)
-                self.buckets[original_key.upper()] = bucket
+                self.all_keys.append(",".join([row[0],row[1],row[2]]))
+                # bucket = Bucket(original_key)
+                # self.buckets[original_key.upper()] = bucket
 
-        if "*,*,*" not in self.buckets.keys():
-            self.buckets["*,*,*"] = Bucket("*,*,*")
-            self.buckets.move_to_end("*,*,*", last = False)
+        if "*,*,*" not in self.all_keys:
+            self.all_keys.insert(0, "*,*,*")
 
+        for key in self.all_keys:
+            bucket = Bucket(key)
+            self.buckets[bucket.original_key.upper()] = bucket
 
     def populate_buckets(self, purchases_file_name):
         print(self.buckets.keys())
