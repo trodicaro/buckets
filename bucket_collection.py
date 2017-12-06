@@ -82,10 +82,11 @@ class BucketCollection:
         #     results.append(current_group)
         for key, bucket in self.buckets.items():
               print(type(key), key)
-              print(type(bucket), bucket.__dir__())
+              print(type(bucket.original_key), bucket.original_key)
+              print(type(bucket.purchases), bucket.purchases)
               current_group = {}
-              current_group["bucket"] =  key
-              current_group["purchases"] =  bucket
+              current_group["bucket"] =  bucket.original_key
+              current_group["purchases"] =  bucket.purchases
               results.append(current_group)
 
         return results

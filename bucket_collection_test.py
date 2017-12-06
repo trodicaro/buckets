@@ -1,6 +1,6 @@
 import unittest
 import os.path
-from buckets import run
+from bucket_collection import run
 
 # test for a very specific purchase record that it gets assigned to the specific bucket
   # eg: 99680,8193774926972,PEARSON,SNA,7,10_day,2017-07-10 07:07:11.587228 => "Pearson,7,10_day"
