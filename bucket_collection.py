@@ -45,7 +45,6 @@ class BucketCollection:
             self.buckets[bucket.original_key.upper()] = bucket
 
     def populate_buckets(self, purchases_file_name):
-        print(self.buckets.keys())
         with open(purchases_file_name) as purchases_file:
             readCSV = csv.reader(purchases_file)
 
@@ -68,13 +67,9 @@ class BucketCollection:
                 possible_keys = [complete_key, publisher_duration_key, publisher_price_key, publisher_only,
                             price_duration_key, duration_only_key, price_only_key, catch_all_key]
 
-                print(possible_keys)
-
                 for possible_key in possible_keys:
-                    print(possible_key, possible_key in self.buckets.keys())
                     if possible_key in self.buckets.keys():
                         stringified_record = ",".join(map(str, row))
-                        print(self.buckets[possible_key].purchases)
                         self.buckets[possible_key].purchases.append(stringified_record)
                         break
 
@@ -94,14 +89,8 @@ class BucketCollection:
       results_file.write(json.dumps(self.to_json(), indent = 4, sort_keys = True))
       results_file.close()
 
-
-# def main(buckets_file_name, purchases_file_name):
-#     buckets = create_keys(buckets_file_name, purchases_file_name)
-#     populated_buckets = populate_buckets(buckets)
-#     results = generate_result(buckets)
-#     print_to_json(results)
-def run(buckets_file_name, purchases_file_name):
+def run(buckets_file_name, purchases_file_name, result_file_name):
     bucket_collection = BucketCollection(buckets_file_name)
     bucket_collection.populate_buckets(purchases_file_name)
-    bucket_collection.to_file("min_results.json")
+    bucket_collection.to_file(result_file_name)
 
