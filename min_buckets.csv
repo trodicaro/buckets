@@ -1,5 +1,8 @@
 Pearson,*,*
 Pearson,2,*
 Pearson,1,3_day
+Pearson,*, 3_day
 McGraw-Hill,*,*
-*,*,*
+Pearson,7,10_day
+*,3,90_day
+*,10,*
