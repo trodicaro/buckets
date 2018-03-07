@@ -11,54 +11,46 @@ from bucket_collection import BucketCollection
 #         pass
 
 class BucketCollectionTest(unittest.TestCase):
-    def _setUp(cls):
-        print("setUp called")
-        # to setup only once
-        # http://stezz.blogspot.com/2011/04/calling-only-once-setup-in-unittest-in.html
-        # https://stackoverflow.com/questions/14305941/run-setup-only-once
+    @classmethod
+    def setUpClass(cls):
+        # cls.results_file = "results.json"
+        cls.results_file = "min_results.json"
+        cls.results_filepath = os.path.join(os.path.dirname(__file__), cls.results_file)
 
-        # buckets_file = "purchase_buckets.csv"
-        # purchases_file = "purchase_data.csv"
-        # results_file = "results.json"
-        self.buckets_file = "min_buckets.csv"
-        self.purchases_file = "min_purchases.csv"
-        self.results_file = "min_results.json"
-        self.results_filepath = os.path.join(os.path.dirname(__file__), self.results_file)
-        self.results_json = {}
+        bucket_collection = BucketCollection("min_buckets.csv", "min_purchases.csv")
+        bucket_collection.to_file(cls.results_file)
 
-        bucket_collection = BucketCollection(self.buckets_file, self.purchases_file)
-        bucket_collection.to_file(self.results_file)
+        with open(cls.results_file) as file:
+            results_json = json.loads(file.read())
 
-        # data = json.loads(open(self.results_filepath, 'r').read())
-        # self.__class__.results_json = json.dumps(results_file.read())
-        with open(self.results_file) as file:
-            data = json.dumps(file)
+        cls.data_dictionary = {}
+        for item in results_json:
+            cls.data_dictionary[item['bucket']] = item['purchases']
 
-        self.results_json.update(data)
+        # with open("min_results.json") as file:
+        #     results_json = json.loads(file.read())
 
     def test_results_file_creation(self):
         "Tests that a result file is generated"
-        print("FILE ********")
-        print(self.results_file)
         self.assertTrue(os.path.isfile(self.results_file))
+
+    def test_results_json_has_content(self):
+        # alternate implementation: when loading JSON from file, instead of fail, show error
+        # bucket_collection = BucketCollection("purchase_buckets.csv", "purchase_data.csv")
+        # https://codeblogmoney.com/validate-json-using-python/
+        # https://stackoverflow.com/questions/23344948/python-validate-and-format-json-files
+        self.assertTrue(len(self.data_dictionary) > 0)
 
     def test_generic_bucket_existence(self):
         "Test that generic bucket was created"
-        print("JSON HERE")
-        print(self.results_json)
-        print("DATA HERE")
-        print(self.data)
-        # self.assertIn("*,*,*", self.results_json)
+        self.assertIn("*,*,*", self.data_dictionary.keys())
 
-    def test_file_content_is_valid_json(self):
-        # print(results_json.__len__())
-        pass
-
-    @unittest.skip("pending")
     def test_buckets_generate_in_desired_order(self):
-        pass
-        # check *,*,* is last bucket
-        # check first bucket in file is  first in results
+        # check *,*,* is first key
+        keys_iterator = iter(self.data_dictionary.keys())
+        self.assertTrue(next(keys_iterator) == "*,*,*")
+        # check first bucket in file provided is next key
+        self.assertTrue(next(keys_iterator) == "Pearson,*,*")
 
     @unittest.skip("pending")
     def test_a_purchase_is_found_only_once(self):
