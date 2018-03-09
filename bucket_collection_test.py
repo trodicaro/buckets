@@ -25,10 +25,15 @@ class BucketCollectionTest(unittest.TestCase):
 
         cls.data_dictionary = {}
         for item in results_json:
-            cls.data_dictionary[item['bucket']] = item['purchases']
-
-        # with open("min_results.json") as file:
-        #     results_json = json.loads(file.read())
+            if item['bucket'] in cls.data_dictionary:
+                cls.data_dictionary[item['bucket'] + '-dup'] = item['purchases']
+            else:
+                cls.data_dictionary[item['bucket']] = item['purchases']
+        print(cls.data_dictionary)
+    # @classmethod
+    # def tearDownClass(cls):
+    #     print("Calling tearDown")
+    #     os.remove(cls.results_file)
 
     def test_results_file_creation(self):
         "Tests that a result file is generated"
@@ -101,18 +106,15 @@ class BucketCollectionTest(unittest.TestCase):
         self.assertIn(test_string, self.data_dictionary["*,*,110_day"])
 
     def test_price_only_bucket(self):
-        test_string = "98809,8629055703626,OXFORD UNIVERSITY PRESS,DCA,10,70_day,2017-03-31 14:27:54.561831"
+        test_string = "98815,8022139588957,ENGLISH PUBLICATIONS,DTW,10,120_day,2017-08-09 12:42:30.561986"
         self.assertIn(test_string, self.data_dictionary["*,10,*"])
 
     def test_catch_all_bucket(self):
         test_string = "98765,0862728122370,OPENSTAX,CLT,5,150_day,2017-05-31 14:21:29.560404"
         self.assertIn(test_string, self.data_dictionary["*,*,*"])
 
-    @unittest.skip("pending")
     def test_edge_case_repeated_bucket(self):
-        pass
-        # eg: SciPub,*,*, only first bucket has purchases, second bucket has no purchases
+        self.assertFalse(self.data_dictionary["SciPub,*,*-dup"])
 
 if __name__ == "__main__":
-    _setUp()
     unittest.main()

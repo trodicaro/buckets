@@ -1,26 +1,30 @@
 import csv
 import json
 import inspect
+from random import randint
 
 class Bucket:
     # https://pythonconquerstheuniverse.wordpress.com/2012/02/15/mutable-default-arguments/
-    def __init__(self, original_key = ""):
-        self.original_key = original_key
+    def __init__(self, case_preserving_key = ""):
+        self.case_preserving_key = case_preserving_key
         self.purchases = []
 
 class BucketCollection:
     def __init__(self, buckets_file_name, purchases_file_name):
         self.buckets = {}
 
+        self.buckets['*,*,*'] = Bucket('*,*,*')
+
         with open(buckets_file_name) as buckets_file:
             readCSV = csv.reader(buckets_file)
 
-            self.buckets['*,*,*'] = Bucket('*,*,*')
-
             for row in readCSV:
-                original_key = ",".join([row[0],row[1],row[2]])
-                bucket = Bucket(original_key)
-                self.buckets[original_key.upper()] = bucket
+                current_key = ",".join([row[0],row[1],row[2]])
+                if current_key.upper() in self.buckets:
+                    current_key += '-dup' + randint(1, 9999).__str__()
+                bucket = Bucket(current_key)
+                # losing the original key here
+                self.buckets[current_key.upper()] = bucket
 
         self.populate_buckets(purchases_file_name)
 
@@ -29,7 +33,10 @@ class BucketCollection:
 
         for key, bucket in self.buckets.items():
               current_group = {}
-              current_group["bucket"] =  bucket.original_key
+              json_key = bucket.case_preserving_key
+              if "-dup" in json_key:
+                  json_key = json_key.split("-dup")[0]
+              current_group["bucket"] =  json_key
               current_group["purchases"] =  bucket.purchases
               results.append(current_group)
 
