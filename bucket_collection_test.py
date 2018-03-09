@@ -14,11 +14,12 @@ from bucket_collection import BucketCollection
 class BucketCollectionTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        # cls.results_file = "results.json"
-        cls.results_file = "min_results.json"
+        cls.results_file = "results.json"
+        # cls.results_file = "min_results.json"
         cls.results_filepath = os.path.join(os.path.dirname(__file__), cls.results_file)
 
-        bucket_collection = BucketCollection("min_buckets.csv", "min_purchases.csv")
+        bucket_collection = BucketCollection("purchase_buckets.csv", "purchase_data.csv")
+        # bucket_collection = BucketCollection("min_buckets.csv", "min_purchases.csv")
         bucket_collection.to_file(cls.results_file)
 
         with open(cls.results_file) as file:
@@ -55,7 +56,7 @@ class BucketCollectionTest(unittest.TestCase):
         keys_iterator = iter(self.data_dictionary.keys())
         self.assertTrue(next(keys_iterator) == "*,*,*")
         # check first bucket in file provided is next key
-        self.assertTrue(next(keys_iterator) == "Pearson,*,*")
+        self.assertTrue(next(keys_iterator) == "McGraw-Hill,5,40_day")
         pass
 
     def test_a_purchase_is_found_only_once(self):
@@ -114,9 +115,9 @@ class BucketCollectionTest(unittest.TestCase):
         test_string = "99191,7848537371773,PENGUIN RANDOMHOUSE,MIA,4,30_day,2017-05-21 10:01:19.571428"
         self.assertIn(test_string, self.data_dictionary["Penguin Randomhouse,*,30_day"])
 
-    def test_duration_only_bucket(self):
-        test_string = "99999,9999999999999,MACMILLAN,MIA,3,110_day,2017-05-23 09:16:43.560846"
-        self.assertIn(test_string, self.data_dictionary["*,*,110_day"])
+    # def test_duration_only_bucket(self):
+    #     test_string = "99999,9999999999999,MACMILLAN,MIA,3,110_day,2017-05-23 09:16:43.560846"
+    #     self.assertIn(test_string, self.data_dictionary["*,*,110_day"])
 
     def test_price_only_bucket(self):
         test_string = "98815,8022139588957,ENGLISH PUBLICATIONS,DTW,10,120_day,2017-08-09 12:42:30.561986"
