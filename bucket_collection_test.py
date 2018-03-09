@@ -1,6 +1,7 @@
 import unittest
 import os.path
 import json
+import random
 from bucket_collection import Bucket
 from bucket_collection import BucketCollection
 
@@ -29,7 +30,6 @@ class BucketCollectionTest(unittest.TestCase):
                 cls.data_dictionary[item['bucket'] + '-dup'] = item['purchases']
             else:
                 cls.data_dictionary[item['bucket']] = item['purchases']
-        print(cls.data_dictionary)
     # @classmethod
     # def tearDownClass(cls):
     #     print("Calling tearDown")
@@ -58,10 +58,23 @@ class BucketCollectionTest(unittest.TestCase):
         self.assertTrue(next(keys_iterator) == "Pearson,*,*")
         pass
 
-    @unittest.skip("pending")
     def test_a_purchase_is_found_only_once(self):
-        pass
-        # going through all json content and ensure no repeats
+        test_purchases = [
+            '98765,0862728122370,OPENSTAX,CLT,5,150_day,2017-05-31 14:21:29.560404',
+            '98771,1899596499745,PEARSON,MIA,3,110_day,2017-05-23 09:16:43.560846',
+            '99377,8660464769977,PEARSON,JFK,2,40_day,2017-02-10 15:04:03.578055',
+            '98795,9277080469051,MCGRAW-HILL,MSP,6,120_day,2017-04-02 11:05:31.561470',
+            '98775,7192583653601,SCIPUB,BOS,8,140_day,2017-08-03 14:02:28.560950',
+            '98835,6544295182149,MACMILLAN,CLE,4,40_day,2017-01-10 14:08:55.562501',
+            '99680,8193774926972,PEARSON,SNA,7,10_day,2017-07-10 07:07:11.587228',
+            '98819,9793386372887,PENGUIN RANDOMHOUSE,DTW,3,90_day,2017-07-14 14:06:01.562089',
+            '99999,9999999999999,MACMILLAN,MIA,3,110_day,2017-05-23 09:16:43.560846',
+            '98815,8022139588957,ENGLISH PUBLICATIONS,DTW,10,120_day,2017-08-09 12:42:30.561986',
+            '98793,3455843886681,ENGLISH PUBLICATIONS,MCO,4,60_day,2017-05-16 08:51:17.561418',
+            '99191,7848537371773,PENGUIN RANDOMHOUSE,MIA,4,30_day,2017-05-21 10:01:19.571428']
+        test_purchase = random.choice(test_purchases)
+        all_purchases = self.data_dictionary.values()
+        self.assertFalse(test_purchase in all_purchases)
 
     @unittest.skip("pending")
     def test_purchases_ordered_by_order_id(self):
