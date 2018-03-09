@@ -76,15 +76,15 @@ class BucketCollectionTest(unittest.TestCase):
         all_purchases = self.data_dictionary.values()
         self.assertFalse(test_purchase in all_purchases)
 
-    @unittest.skip("pending")
     def test_purchases_ordered_by_order_id(self):
-        pass
-        # in a specific bucket check that the order_id's are going up
+        random_bucket_key, bucket_purchases = random.choice(list(self.data_dictionary.items()))
+        ids = list(map(lambda purchase: int(purchase.split(',')[0]), bucket_purchases))
+        self.assertTrue(sorted(ids) == ids)
 
     def test_publisher_price_duration_bucket(self):
         "Most specific"
-        test_string = "99680,8193774926972,PEARSON,SNA,7,10_day,2017-07-10 07:07:11.587228"
-        self.assertIn(test_string, self.data_dictionary["Pearson,7,10_day"])
+        test_string = "99145,0926889346680,MCGRAW-HILL,PHX,6,30_day,2017-08-31 12:52:41.570232"
+        self.assertIn(test_string, self.data_dictionary["McGraw-Hill,6,30_day"])
 
     def test_publisher_duration_bucket(self):
         test_string = "98835,6544295182149,MACMILLAN,CLE,4,40_day,2017-01-10 14:08:55.562501"
