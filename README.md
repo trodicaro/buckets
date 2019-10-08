@@ -1,5 +1,5 @@
 # Buckets
-My first take at Python. Given a csv file with "buckets" and another csv file with purchase records, categorize the records into buckets based on some specificity rules.
+Given a csv file with "buckets" and another csv file with purchase records, categorize the records into buckets based on some specificity rules.
 
 **Assumptions**
 Assumed English words in UTF-8 in the files, thus didn't use any character decoding (https://stackoverflow.com/questions/6797984/how-to-convert-string-to-lowercase-in-python). Seems like Python3 handles it though.
