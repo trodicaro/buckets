@@ -20,5 +20,3 @@ Ideally I would run different sets of csv files on every run, but I kept it at o
 **Other Notes**
 
 Must use python 3.6 or newer. I had a working version with OrderedDict (for lower versions of python, but decided to switch to the regular dictionary structure since ordering is supported starting python3.6).
-
-Seems like the buckets in example output are sorted alphabetically and first bucket is the most generic one, but that's not the order of the 4 sample buckets. I have followed the instructions to keep the order per the purchase_buckets.csv file.
